@@ -31,11 +31,14 @@ def registrar_pesada(
     if usuario is None or not usuario.is_authenticated:
         raise RegistroPesadaError("Usuario no autenticado.")
 
-    # 2. Obtener animal
+    # 2. Obtener animal y verificar si está activo
     try:
         animal = Animal.objects.get(id=animal_id)
     except Animal.DoesNotExist:
         raise RegistroPesadaError("El animal no existe.")
+
+    if not animal.activo:
+        raise RegistroPesadaError("No se pueden registrar pesadas para un animal inactivo.")
 
     # 3. Validar peso
     if peso is None or peso <= 0:

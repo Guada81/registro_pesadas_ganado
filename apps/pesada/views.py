@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.timezone import make_aware
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 from datetime import datetime, time
 
@@ -32,7 +33,7 @@ def registrar_pesada_view(request):
             except RegistroPesadaError as e:
                 messages.error(request, str(e))
     else:
-        form = PesadaForm()
+        form = PesadaForm(initial={"unidad_medida": request.user.unidad_medida_prefer})
 
     return render(request, "pesada/registrar_pesada.html", {"form": form})
 
@@ -74,15 +75,27 @@ def listado_pesadas(request):
 
     animales = Animal.objects.all().order_by("id")
 
+    # Paginación (15 pesadas por página)
+    paginator = Paginator(pesadas, 15)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    # Conservar otros parámetros de filtro al cambiar de página
+    query_params = request.GET.copy()
+    if "page" in query_params:
+        query_params.pop("page")
+    query_string = query_params.urlencode()
+
     return render(
         request,
         "pesada/listado_pesadas.html",
         {
-            "pesadas": pesadas,
+            "pesadas": page_obj,
             "animales": animales,
             "animal_seleccionado": animal_id,
             "fecha_desde": fecha_desde,
             "fecha_hasta": fecha_hasta,
+            "query_string": query_string,
         },
     )
 

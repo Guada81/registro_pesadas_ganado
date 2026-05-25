@@ -12,7 +12,7 @@ class Pesada(models.Model):
     
     animal = models.ForeignKey("animal.Animal", on_delete=models.PROTECT, related_name='pesadas')
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
-    fecha_hora = models.DateTimeField(default=timezone.now)
+    fecha_hora = models.DateTimeField(default=timezone.now, db_index=True)
     peso = models.DecimalField(max_digits=8, decimal_places=2)
     unidad_medida = models.CharField(max_length=5, choices=UNIDADES)
     peso_kg = models.DecimalField(max_digits=8, decimal_places=2, editable=False, null=False)

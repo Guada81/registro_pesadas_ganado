@@ -10,7 +10,14 @@ class UsuarioManager(UserManager):
         extra_fields.setdefault("is_active", True)
 
         if "rol" not in extra_fields:
-            extra_fields["rol"] = Rol.objects.get(codigo=Rol.ADMIN)
+            rol, _ = Rol.objects.get_or_create(
+                codigo=Rol.ADMIN,
+                defaults={
+                    "descripcion": "Administrador con acceso total a todas las funciones y configuraciones.",
+                    "activo": True
+                }
+            )
+            extra_fields["rol"] = rol
 
         return super().create_superuser(username, email, password, **extra_fields)
 

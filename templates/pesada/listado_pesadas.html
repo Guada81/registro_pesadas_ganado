@@ -95,4 +95,24 @@
         {% endfor %}
     </tbody>
 </table>
+
+{% if pesadas.has_other_pages %}
+    <div class="pagination">
+        <span class="step-links">
+            {% if pesadas.has_previous %}
+                <a href="?page=1{% if query_string %}&{{ query_string }}{% endif %}" class="page-link">&laquo; Primera</a>
+                <a href="?page={{ pesadas.previous_page_number }}{% if query_string %}&{{ query_string }}{% endif %}" class="page-link">Anterior</a>
+            {% endif %}
+
+            <span class="current">
+                Página {{ pesadas.number }} de {{ pesadas.paginator.num_pages }}
+            </span>
+
+            {% if pesadas.has_next %}
+                <a href="?page={{ pesadas.next_page_number }}{% if query_string %}&{{ query_string }}{% endif %}" class="page-link">Siguiente</a>
+                <a href="?page={{ pesadas.paginator.num_pages }}{% if query_string %}&{{ query_string }}{% endif %}" class="page-link">Última &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+{% endif %}
 {% endblock %}
