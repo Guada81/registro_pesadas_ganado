@@ -1,0 +1,57 @@
+# ==============================
+# Django + VS Code + Windows
+# ==============================
+
+# Archivos de sistema
+.DS_Store
+desktop.ini
+Thumbs.db
+
+# Entornos virtuales
+env/
+venv/
+.env/
+*.env
+
+# Archivos de base de datos SQLite
+*.sqlite3
+
+# Archivos de caché y bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Migraciones (opcional: descomentá si no querés subirlas)
+# */migrations/
+
+# Archivos de logs
+*.log
+
+# Configuración de VS Code
+.vscode/
+
+# Archivos temporales de Django
+staticfiles/
+media/
+tmp/
+*.pot
+*.pyc
+
+# Archivos de compilación / empaquetado
+build/
+dist/
+*.egg-info/
+
+# Archivos de coverage o tests
+.coverage
+*.cover
+coverage.xml
+nosetests.xml
+
+# Archivos de entorno y variables secretas
+.env
+*.env
+
+# Archivos específicos de Windows
+ehthumbs.db
+Icon?

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Registrar pesada{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <a href="{% url 'dashboard' %}" class="btn-volver">
+        ← Volver al dashboard
+    </a>
+
+    <h1>Registrar pesada</h1>
+
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <div class="card form-card">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit" class="btn-primary">
+                Guardar
+            </button>
+        </form>
+    </div>
+
+</div>
+{% endblock %}
+

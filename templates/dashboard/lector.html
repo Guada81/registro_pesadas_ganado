@@ -1,0 +1,64 @@
+{% load pesadas_extra %}
+
+<h1 class="page-title">Panel Lector</h1>
+<p class="page-subtitle">Consulta y seguimiento de pesadas</p>
+
+<div class="dashboard-layout">
+
+    <!-- =========================
+         COLUMNA PRINCIPAL
+    ========================= -->
+    <div class="dashboard-main">
+
+        <!-- RESUMEN GENERAL -->
+        <section class="dashboard-section">
+            <h2 class="section-title">Resumen general</h2>
+
+            <div class="cards">
+                <div class="card card-primary">
+                    <h3>Total de pesadas</h3>
+                    <p class="metric">{{ total_pesadas }}</p>
+                </div>
+
+                <div class="card">
+                    <h3>Última pesada registrada</h3>
+                    {% if ultima_pesada %}
+                        <p>
+                            {{ ultima_pesada.fecha_hora|date:"d/m/Y H:i" }}<br>
+                            {{ ultima_pesada.animal }} –
+                            {{ ultima_pesada.peso_kg|mostrar_peso:request.user.unidad_medida_prefer }}
+                            {{ request.user.unidad_medida_prefer }}
+                        </p>
+                    {% else %}
+                        <p>No hay registros</p>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- =========================
+         COLUMNA LATERAL
+    ========================= -->
+    <aside class="dashboard-sidebar">
+        <h2 class="section-title">Accesos</h2>
+
+        <div class="cards">
+
+            <div class="card">
+                <a href="{% url 'usuario:configuracion' %}">
+                    Configuración
+                </a>
+            </div>
+
+            <div class="card">
+                <a href="{% url 'pesada:listado' %}">
+                    Consultar pesadas
+                </a>
+            </div>
+            
+        </div>
+        
+    </aside>
+</div>

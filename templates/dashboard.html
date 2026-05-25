@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h1>Dashboard</h1>
+
+{% if es_admin %}
+    {% include "dashboard/admin.html" %}
+{% elif es_operador %}
+    {% include "dashboard/operador.html" %}
+{% elif es_lector %}
+    {% include "dashboard/lector.html" %}
+{% else %}
+    <p>No tiene permisos para ver el dashboard.</p>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,70 @@
+{% load pesadas_extra %}
+
+<h1 class="page-title">Panel Operador</h1>
+<p class="page-subtitle">Resumen de tu actividad de pesadas</p>
+
+<div class="dashboard-layout">
+
+    <!-- =========================
+         COLUMNA PRINCIPAL
+    ========================= -->
+    <div class="dashboard-main">
+
+        <!-- RESUMEN PERSONAL -->
+        <section class="dashboard-section">
+            <h2 class="section-title">Resumen personal</h2>
+
+            <div class="cards">
+                <div class="card card-primary">
+                    <h3>Pesadas registradas por vos</h3>
+                    <p class="metric">{{ total_pesadas_usuario }}</p>
+                </div>
+
+                <div class="card">
+                    <h3>Última pesada registrada</h3>
+                    {% if ultima_pesada_usuario %}
+                        <p>
+                            {{ ultima_pesada_usuario.fecha_hora|date:"d/m/Y H:i" }}<br>
+                            {{ ultima_pesada_usuario.animal }} –
+                            {{ ultima_pesada_usuario.peso_kg|mostrar_peso:request.user.unidad_medida_prefer }}
+                            {{ request.user.unidad_medida_prefer }}
+                        </p>
+                    {% else %}
+                        <p>No registraste pesadas aún</p>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- =========================
+         COLUMNA LATERAL
+    ========================= -->
+    <aside class="dashboard-sidebar">
+        <h2 class="section-title">Accesos rápidos</h2>
+
+        <div class="cards">
+
+            <div class="card">
+                <a href="{% url 'usuario:configuracion' %}">
+                    Configuración
+                </a>
+            </div>
+
+            <div class="card">
+                <a href="{% url 'pesada:registrar_pesada' %}">
+                    Registrar pesada
+                </a>
+            </div>
+
+            <div class="card">
+                <a href="{% url 'pesada:listado' %}">
+                    Ver listado de pesadas
+                </a>
+            </div>
+
+        </div>
+        
+    </aside>
+</div>

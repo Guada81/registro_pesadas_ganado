@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% load pesadas_extra %}
+
+{% block title %}Historial de {{ animal }}{% endblock %}
+
+{% block content %}
+
+<a href="{% url 'pesada:listado' %}" class="btn-volver">
+    ← Volver al listado
+</a>
+
+<h1>Historial de {{ animal }}</h1>
+
+{% if pesadas %}
+
+<div class="metrics-bar">
+    <div class="metric-item">
+        <span class="metric-label">Pesadas</span>
+        <span class="metric-value">{{ total_pesadas }}</span>
+    </div>
+
+    <div class="metric-item">
+        <span class="metric-label">Mín</span>
+        {% if peso_min %}
+            <span class="metric-value">
+                {{ peso_min|mostrar_peso:request.user.unidad_medida_prefer }}
+                {{ request.user.unidad_medida_prefer }}
+            </span>
+        {% else %}
+            <span class="metric-value">–</span>
+        {% endif %}
+    </div>
+
+    <div class="metric-item">
+        <span class="metric-label">Máx</span>
+        {% if peso_max %}
+            <span class="metric-value">
+                {{ peso_max|mostrar_peso:request.user.unidad_medida_prefer }}
+                {{ request.user.unidad_medida_prefer }}
+            </span>
+        {% else %}
+            <span class="metric-value">–</span>
+        {% endif %}
+    </div>
+
+    <div class="metric-item">
+        <span class="metric-label">Promedio</span>
+        {% if peso_promedio %}
+            <span class="metric-value">
+                {{ peso_promedio|mostrar_peso:request.user.unidad_medida_prefer }}
+                {{ request.user.unidad_medida_prefer }}
+            </span>
+        {% else %}
+            <span class="metric-value">–</span>
+        {% endif %}
+    </div>
+
+    <div class="metric-item">
+        <span class="metric-label">Variación reciente</span>
+
+        {% if variacion_reciente %}
+            <span class="metric-value">
+                {{ variacion_reciente|mostrar_peso:request.user.unidad_medida_prefer }}
+                {{ request.user.unidad_medida_prefer }}
+                {% if tendencia_reciente == "up" %}
+                    <span class="trend up">↑</span>
+                {% elif tendencia_reciente == "down" %}
+                    <span class="trend down">↓</span>
+                {% elif tendencia_reciente == "equal" %}
+                    <span class="trend equal">=</span>
+                {% endif %}
+            </span>
+        {% else %}
+            <span class="metric-value">–</span>
+        {% endif %}
+    </div>
+</div>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha y hora</th>
+                <th>Peso</th>
+                <th>Unidad</th>
+                <th>Usuario</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pesada in pesadas %}
+                <tr>
+                    <td>{{ pesada.fecha_hora|date:"d/m/Y H:i" }}</td>
+                    <td>
+                        {{ pesada.peso_kg|mostrar_peso:request.user.unidad_medida_prefer }}
+                        {{ request.user.unidad_medida_prefer }}
+                    </td>
+                    <td>{{ request.user.unidad_medida_prefer }}</td>
+                    <td>{{ pesada.usuario.username }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No hay pesadas registradas para este animal.</p>
+{% endif %}
+
+{% endblock %}

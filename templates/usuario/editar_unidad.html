@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Configuración{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <a href="{% url 'dashboard' %}" class="btn-volver">
+        ← Volver al dashboard
+    </a>
+    
+    <h1 class="page-title">Configuración</h1>
+    <p class="page-subtitle">
+        Preferencias personales del usuario
+    </p>
+
+    <div class="card form-card">
+        <h2 class="section-title">Unidad de medida</h2>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit" class="btn-primary">
+                Guardar
+            </button>
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}

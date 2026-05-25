@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load pesadas_extra %}
+
+{% block title %}Listado de Pesadas{% endblock %}
+
+{% block content %}
+<a href="{% url 'dashboard' %}" class="btn-volver">
+    ← Volver al dashboard
+</a>
+
+<h1>Listado de Pesadas</h1>
+
+<form method="get" class="filtros">
+    <div class="filtro-grupo">
+        <label for="animal">Animal</label>
+        <select name="animal" id="animal">
+            <option value="">Todos</option>
+            {% for animal in animales %}
+                <option value="{{ animal.id }}"
+                    {% if animal_seleccionado == animal.id|stringformat:"s" %}
+                        selected
+                    {% endif %}
+                >
+                    {{ animal }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="filtro-grupo">
+        <label for="fecha_desde">Desde</label>
+        <input type="date" name="fecha_desde" id="fecha_desde"
+               value="{{ fecha_desde }}">
+    </div>
+
+    <div class="filtro-grupo">
+        <label for="fecha_hasta">Hasta</label>
+        <input type="date" name="fecha_hasta" id="fecha_hasta"
+               value="{{ fecha_hasta }}">
+    </div>
+
+    <div class="filtro-acciones">
+        <button type="submit">Filtrar</button>
+        <a href="{% url 'pesada:listado' %}" class="btn-secondary">
+            Limpiar filtros
+        </a>
+    </div>
+</form>
+
+<br>
+
+<table border="1" cellpadding="5" cellspacing="0">
+    <thead>
+        <tr>
+            <th>Fecha y hora</th>
+            <th>Animal</th>
+            <th>Peso</th>
+
+            {% if request.user.rol.codigo == 'ADMIN' %}
+                <th>Peso original</th>
+            {% endif %}
+
+            <th>Usuario</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for pesada in pesadas %}
+            <tr>
+                <td>{{ pesada.fecha_hora|date:"d/m/Y H:i" }}</td>
+                <td>
+                    <a href="{% url 'pesada:historial_animal' pesada.animal.id %}">
+                        {{ pesada.animal }}
+                    </a>
+                </td>
+                <td>
+                {{ pesada.peso_kg|mostrar_peso:request.user.unidad_medida_prefer }}
+                {{ request.user.unidad_medida_prefer }}
+                </td>
+                
+                {% if request.user.rol.codigo == 'ADMIN' %}
+                    <td>
+                        {{ pesada.peso }}
+                        {{ pesada.unidad_medida }}
+                    </td>
+                {% endif %}
+
+                <td>{{ pesada.usuario.username }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="{% if request.user.rol.codigo == 'ADMIN' %}5{% else %}4{% endif %}">
+                    No hay pesadas registradas.
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
