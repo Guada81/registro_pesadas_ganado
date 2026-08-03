@@ -1,11 +1,20 @@
+:root {
+    --primary: #1e3a1e;
+    --accent: #10b981;
+    --bg-main: #f8fafc;
+    --text-main: #1e293b;
+    --shadow-premium: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+}
+
 /* =====================================================
    BASE / RESET GENERAL
 ===================================================== */
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Inter', sans-serif;
     margin: 0;
-    background-color: #f4f6f8;
+    background-color: var(--bg-main);
+    color: var(--text-main);
 }
 
 
@@ -14,9 +23,10 @@ body {
 ===================================================== */
 
 header {
-    background-color: #2c3e50;
-    color: white;
-    padding: 10px 20px;
+    background-color: var(--primary);
+    color: #ffffff;
+    padding: 14px 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.06);
 }
 
 nav {
@@ -26,11 +36,24 @@ nav {
 }
 
 nav button {
-    background: #e74c3c;
+    background-color: #e74c3c;
     border: none;
-    color: white;
-    padding: 6px 10px;
+    color: #ffffff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13px;
     cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+nav button:hover {
+    background-color: #c0392b;
+    transform: translateY(-1px);
+}
+
+nav button:active {
+    transform: translateY(0);
 }
 
 .nav-user {
@@ -71,11 +94,13 @@ main {
 }
 
 .card {
-    background: white;
-    border-radius: 6px;
-    padding: 15px 20px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 20px 24px;
     min-width: 220px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: 1px solid #e2e8f0;
+    box-shadow: var(--shadow-premium);
+    transition: all 0.2s ease-in-out;
 }
 
 .card h3 {
@@ -87,13 +112,13 @@ main {
 .metric {
     font-size: 28px;
     font-weight: bold;
-    color: #2c3e50;
+    color: var(--primary);
 }
 
 /* Links dentro de cards (accesos rápidos) */
 .card a {
     text-decoration: none;
-    color: #2c3e50;
+    color: var(--primary);
     font-weight: bold;
 }
 
@@ -151,20 +176,34 @@ main {
 }
 
 .filtro-acciones button {
-    background-color: #2c3e50;
+    background-color: var(--primary);
     color: white;
     border: none;
-    padding: 7px 12px;
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-weight: 600;
     cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.filtro-acciones button:hover {
+    background-color: #274b27;
+    transform: translateY(-1px);
 }
 
 .btn-secondary {
-    background-color: #bdc3c7;
-    color: #2c3e50;
-    padding: 7px 12px;
+    background-color: #e2e8f0;
+    color: var(--primary);
+    padding: 7px 14px;
     text-decoration: none;
-    border-radius: 3px;
+    border-radius: 6px;
     font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-secondary:hover {
+    background-color: #cbd5e1;
 }
 
 
@@ -219,28 +258,21 @@ table tr:nth-child(even) {
 .form-group {
     display: flex;
     flex-direction: column;
-    margin-bottom: 15px;
+    margin-bottom: 18px;
 }
 
 .form-group label {
     font-size: 14px;
-    color: #555;
-    margin-bottom: 4px;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 6px;
 }
 
-.form-group input {
-    padding: 8px;
-    font-size: 14px;
-}
-
-.btn-primary {
+/* El botón primario general se define abajo en FORMULARIOS / ESTILO BASE,
+   aquí solo forzamos que en la tarjeta de login ocupe el 100% del ancho */
+.login-card .btn-primary {
     width: 100%;
-    background-color: #2c3e50;
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    font-size: 15px;
+    margin-top: 10px;
 }
 
 .error-text {
@@ -251,6 +283,7 @@ table tr:nth-child(even) {
 }
 
 
+
 /* =====================================================
    NAVEGACIÓN AUXILIAR
 ===================================================== */
@@ -259,12 +292,14 @@ table tr:nth-child(even) {
     display: inline-block;
     margin-bottom: 15px;
     text-decoration: none;
-    color: #2c3e50;
+    color: var(--primary);
     font-weight: bold;
     font-size: 14px;
+    transition: color 0.2s ease-in-out;
 }
 
 .btn-volver:hover {
+    color: var(--accent);
     text-decoration: underline;
 }
 
@@ -338,14 +373,14 @@ table tr:nth-child(even) {
 .section-title {
     margin: 30px 0 15px;
     font-size: 16px;
-    color: #2c3e50;
-    border-bottom: 1px solid #e0e0e0;
+    color: var(--primary);
+    border-bottom: 1px solid #e2e8f0;
     padding-bottom: 6px;
 }
 
 /* Card destacada (métrica principal) */
 .card-primary {
-    border-left: 4px solid #2c3e50;
+    border-left: 4px solid var(--accent);
 }
 
 /* Texto secundario (fechas, detalles no prioritarios) */
@@ -428,40 +463,112 @@ table tr:nth-child(even) {
 ===================================================== */
 
 /* Card específica para formularios */
+.form-card, .login-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: var(--shadow-premium);
+    padding: 30px 40px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
 .form-card {
     max-width: 600px;
-    padding: 2rem;
+}
+
+.login-card {
+    max-width: 380px;
+    padding: 30px;
 }
 
 .form-card form {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    width: 100%;
 }
 
+/* Manejo de párrafos en formularios Django (.as_p) */
 .form-card form p {
-    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 1.25rem;
 }
 
 .form-card form label {
     display: block;
-    font-weight: 600;
-    margin-bottom: 4px;
-    color: #2c3e50;
-}
-
-.form-card form input,
-.form-card form select {
-    width: 100%;
-    max-width: 280px;
-    padding: 6px 8px;
     font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text-main);
 }
 
-/* Botón primario en formularios */
+/* Diseño general de controles de formulario */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+select {
+    width: 100%;
+    max-width: 320px;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--text-main);
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    box-sizing: border-box;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Enfoque (focus) interactivo con --accent */
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="date"]:focus,
+select:focus {
+    border-color: var(--accent);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+}
+
+/* Botón primario moderno global */
+.btn-primary {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary);
+    color: #ffffff;
+    border: none;
+    padding: 10px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+.btn-primary:hover {
+    background-color: #274b27; /* Verde bosque ligeramente más claro */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* Margen del botón en el formulario */
 .form-card .btn-primary {
-    margin-top: 1.5rem;
-    padding: 8px 20px;
+    margin-top: 1rem;
 }
 
 /* Link de navegación simple */
@@ -469,12 +576,14 @@ table tr:nth-child(even) {
     display: inline-block;
     margin-top: 16px;
     font-size: 14px;
-    color: #2c3e50;
+    color: var(--primary);
     text-decoration: none;
     font-weight: bold;
+    transition: color 0.2s ease-in-out;
 }
 
 .link-back:hover {
+    color: var(--accent);
     text-decoration: underline;
 }
 
@@ -495,18 +604,19 @@ table tr:nth-child(even) {
 }
 
 .page-link {
-    background-color: #2c3e50;
+    background-color: var(--primary);
     color: white;
-    padding: 6px 12px;
+    padding: 8px 14px;
     text-decoration: none;
-    border-radius: 4px;
+    border-radius: 6px;
     font-size: 14px;
     font-weight: bold;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease-in-out;
 }
 
 .page-link:hover {
-    background-color: #34495e;
+    background-color: #274b27;
+    transform: translateY(-1px);
 }
 
 .current {
