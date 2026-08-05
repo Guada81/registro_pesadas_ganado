@@ -24,4 +24,6 @@ urlpatterns = [
     path("", include("django.contrib.auth.urls")),
     path("pesadas/", include("apps.pesada.urls")),
     path("usuarios/", include("apps.usuario.urls")),
+    # Endpoint para la App Móvil (API REST)
+    path("api/v1/", include("apps.pesada.api.urls")),
 ]
