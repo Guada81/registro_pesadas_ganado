@@ -62,6 +62,25 @@ def registrar_pesada(
 
     return pesada
 
+@transaction.atomic
+def invalidar_pesada(*, pesada_id: int, usuario: User) -> Pesada:
+    """Marca una pesada como no válida (soft-delete). No se permite edición ni borrado físico."""
+
+    if usuario is None or not usuario.is_authenticated:
+        raise RegistroPesadaError("Usuario no autenticado.")
+
+    try:
+        pesada = Pesada.objects.get(id=pesada_id)
+    except Pesada.DoesNotExist:
+        raise RegistroPesadaError("La pesada no existe.")
+
+    if not pesada.valida:
+        raise RegistroPesadaError("La pesada ya estaba invalidada.")
+
+    pesada.valida = False
+    pesada.save(update_fields=["valida"])
+
+    return pesada
 
 def obtener_metricas_animal(animal):
     pesadas = (
