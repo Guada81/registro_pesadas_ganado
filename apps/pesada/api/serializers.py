@@ -15,7 +15,7 @@ class PesadaSerializer(serializers.ModelSerializer):
             'peso_kg',
             'valida',
         ]
-        read_only_fields = ['id', 'peso_kg', 'valida']
+        read_only_fields = ['id', 'peso_kg', 'valida', 'usuario']
 
     def create(self, validated_data):
         """
