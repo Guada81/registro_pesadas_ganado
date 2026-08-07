@@ -3,6 +3,8 @@ from apps.pesada.models import Pesada
 from apps.pesada.services import registrar_pesada, RegistroPesadaError
 
 class PesadaSerializer(serializers.ModelSerializer):
+    uuid_cliente = serializers.UUIDField(required=False, allow_null=True, validators=[])
+
     class Meta:
         model = Pesada
         fields = [
@@ -14,6 +16,7 @@ class PesadaSerializer(serializers.ModelSerializer):
             'unidad_medida',
             'peso_kg',
             'valida',
+            'uuid_cliente',
         ]
         read_only_fields = ['id', 'peso_kg', 'valida', 'usuario']
 
@@ -27,6 +30,7 @@ class PesadaSerializer(serializers.ModelSerializer):
         peso = validated_data['peso']
         unidad_medida = validated_data['unidad_medida']
         fecha_hora = validated_data.get('fecha_hora')
+        uuid_cliente = validated_data.get('uuid_cliente')
 
         try:
             pesada = registrar_pesada(
@@ -35,8 +39,8 @@ class PesadaSerializer(serializers.ModelSerializer):
                 peso=peso,
                 unidad_medida=unidad_medida,
                 fecha_hora=fecha_hora,
+                uuid_cliente=uuid_cliente,
             )
             return pesada
         except RegistroPesadaError as e:
-            # Captura excepciones del servicio y las lanza como error 400 de la API
             raise serializers.ValidationError({"detail": str(e)})

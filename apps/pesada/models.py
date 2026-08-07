@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from apps.pesada.utils import convertir_a_kg
+import uuid
 
 class Pesada(models.Model):
 
@@ -17,6 +18,7 @@ class Pesada(models.Model):
     unidad_medida = models.CharField(max_length=5, choices=UNIDADES)
     peso_kg = models.DecimalField(max_digits=8, decimal_places=2, editable=False, null=False)
     valida = models.BooleanField(default=True)
+    uuid_cliente = models.UUIDField(null=True, blank=True, unique=True, db_index=True)
 
     def save(self, *args, **kwargs):
         if self.peso_kg is None:
