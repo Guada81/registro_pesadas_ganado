@@ -25,8 +25,16 @@ def registrar_pesada(
     peso: Decimal,
     unidad_medida: str,
     fecha_hora=None,
+    uuid_cliente=None,
 ) -> Pesada: # Indica el tipo de dato, retorno de la función
 
+    # 0. Idempotencia: si esta pesada ya fue registrada (mismo UUID de cliente),
+    # devolver la existente en vez de crear una nueva ni fallar.
+    if uuid_cliente is not None:
+        pesada_existente = Pesada.objects.filter(uuid_cliente=uuid_cliente).first()
+        if pesada_existente is not None:
+            return pesada_existente
+        
     # 1. Validar usuario
     if usuario is None or not usuario.is_authenticated:
         raise RegistroPesadaError("Usuario no autenticado.")
@@ -57,16 +65,36 @@ def registrar_pesada(
         peso=peso,
         peso_kg=peso_kg,
         unidad_medida=unidad_medida,
-        fecha_hora=fecha_hora
+        fecha_hora=fecha_hora,
+        uuid_cliente=uuid_cliente,
     )
 
     return pesada
 
+@transaction.atomic
+def invalidar_pesada(*, pesada_id: int, usuario: User) -> Pesada:
+    """Marca una pesada como no válida (soft-delete). No se permite edición ni borrado físico."""
+
+    if usuario is None or not usuario.is_authenticated:
+        raise RegistroPesadaError("Usuario no autenticado.")
+
+    try:
+        pesada = Pesada.objects.get(id=pesada_id)
+    except Pesada.DoesNotExist:
+        raise RegistroPesadaError("La pesada no existe.")
+
+    if not pesada.valida:
+        raise RegistroPesadaError("La pesada ya estaba invalidada.")
+
+    pesada.valida = False
+    pesada.save(update_fields=["valida"])
+
+    return pesada
 
 def obtener_metricas_animal(animal):
     pesadas = (
         Pesada.objects
-        .filter(animal=animal)
+        .filter(animal=animal, valida=True)
         .order_by("-fecha_hora")
     )
 
