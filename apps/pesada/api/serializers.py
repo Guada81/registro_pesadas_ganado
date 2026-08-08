@@ -42,5 +42,5 @@ class PesadaSerializer(serializers.ModelSerializer):
                 uuid_cliente=uuid_cliente,
             )
             return pesada
-        except RegistroPesadaError as e:
+        except (RegistroPesadaError, ValueError) as e:
             raise serializers.ValidationError({"detail": str(e)})
