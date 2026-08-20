@@ -11,7 +11,7 @@ class Pesada(models.Model):
         ('lb', 'Libras'),
     )
     
-    animal = models.ForeignKey("animal.Animal", on_delete=models.PROTECT, related_name='pesadas')
+    animal = models.ForeignKey("animal.Animal", on_delete=models.PROTECT, related_name='pesadas', null=True, blank=True)
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     fecha_hora = models.DateTimeField(default=timezone.now, db_index=True)
     peso = models.DecimalField(max_digits=8, decimal_places=2)
@@ -19,6 +19,7 @@ class Pesada(models.Model):
     peso_kg = models.DecimalField(max_digits=8, decimal_places=2, editable=False, null=False)
     valida = models.BooleanField(default=True)
     uuid_cliente = models.UUIDField(null=True, blank=True, unique=True, db_index=True)
+    caravana_desconocida = models.CharField(max_length=50, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if self.peso_kg is None:

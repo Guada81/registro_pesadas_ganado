@@ -17,7 +17,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from app_ganado.views import dashboard_view
-from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
     path("", dashboard_view, name="dashboard"),
@@ -27,5 +26,5 @@ urlpatterns = [
     path("usuarios/", include("apps.usuario.urls")),
     # Endpoint para la App Móvil (API REST)
     path("api/v1/", include("apps.pesada.api.urls")),
-    path("api/v1/token/", obtain_auth_token, name="api-token-auth"),
+    path("api/v1/", include("apps.usuario.api.urls")),
 ]

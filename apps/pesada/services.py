@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 from apps.pesada.models import Pesada
 from apps.pesada.utils import convertir_a_kg
 from apps.animal.models import Animal
+from apps.usuario.models import Rol
 
 from decimal import Decimal
 
@@ -20,12 +21,13 @@ class RegistroPesadaError(Exception):
 @transaction.atomic
 def registrar_pesada(
     *,
-    animal_id: int,
+    animal_id: int = None,
     usuario: User, #marca una advertencia porque el get_user_model retorna una variable dinámica (se ejecuta en runtime)
     peso: Decimal,
     unidad_medida: str,
     fecha_hora=None,
     uuid_cliente=None,
+    caravana_desconocida: str = None,
 ) -> Pesada: # Indica el tipo de dato, retorno de la función
 
     # 0. Idempotencia: si esta pesada ya fue registrada (mismo UUID de cliente),
@@ -39,14 +41,19 @@ def registrar_pesada(
     if usuario is None or not usuario.is_authenticated:
         raise RegistroPesadaError("Usuario no autenticado.")
 
-    # 2. Obtener animal y verificar si está activo
-    try:
-        animal = Animal.objects.get(id=animal_id)
-    except Animal.DoesNotExist:
-        raise RegistroPesadaError("El animal no existe.")
+    # 2. Animal identificado o caravana desconocida
+    animal = None
+    if animal_id is not None:
+        try:
+            animal = Animal.objects.get(id=animal_id)
+        except Animal.DoesNotExist:
+            raise RegistroPesadaError("El animal no existe.")
 
-    if not animal.activo:
-        raise RegistroPesadaError("No se pueden registrar pesadas para un animal inactivo.")
+        if not animal.activo:
+            raise RegistroPesadaError("No se pueden registrar pesadas para un animal inactivo.")
+        
+    elif not caravana_desconocida:
+        raise RegistroPesadaError("Debe indicar un animal o, si la caravana no fue reconocida, el número leído.")    
 
     # 3. Validar peso
     if peso is None or peso <= 0:
@@ -67,6 +74,7 @@ def registrar_pesada(
         unidad_medida=unidad_medida,
         fecha_hora=fecha_hora,
         uuid_cliente=uuid_cliente,
+        caravana_desconocida=caravana_desconocida,
     )
 
     return pesada
@@ -82,6 +90,12 @@ def invalidar_pesada(*, pesada_id: int, usuario: User) -> Pesada:
         pesada = Pesada.objects.get(id=pesada_id)
     except Pesada.DoesNotExist:
         raise RegistroPesadaError("La pesada no existe.")
+
+    if usuario.rol.codigo == Rol.LECTOR:
+        raise RegistroPesadaError("El rol Lector no tiene permisos para invalidar pesadas.")
+
+    if usuario.rol.codigo == Rol.OPERADOR and pesada.usuario_id != usuario.id:
+        raise RegistroPesadaError("Un operador solo puede invalidar sus propias pesadas.")
 
     if not pesada.valida:
         raise RegistroPesadaError("La pesada ya estaba invalidada.")
