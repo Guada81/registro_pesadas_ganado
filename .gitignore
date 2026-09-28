@@ -55,3 +55,6 @@ nosetests.xml
 # Archivos específicos de Windows
 ehthumbs.db
 Icon?
+
+# Certificados y llaves privadas
+*.pem
