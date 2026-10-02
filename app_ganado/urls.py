@@ -27,4 +27,5 @@ urlpatterns = [
     # Endpoint para la App Móvil (API REST)
     path("api/v1/", include("apps.pesada.api.urls")),
     path("api/v1/", include("apps.usuario.api.urls")),
+    path("api/v1/", include("apps.animal.api.urls")),
 ]
